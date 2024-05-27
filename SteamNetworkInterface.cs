@@ -48,7 +48,7 @@ namespace SqualiveNetworking.SteamTransport
 
         private NativeReference<bool> _isValid;
 
-        public bool IsValid => _isValid.IsCreated && _isValid.Value;
+        private bool IsValid => _isValid.IsCreated && _isValid.Value;
 
         private SteamNetworkParameters _parameters;
         
@@ -432,11 +432,10 @@ namespace SqualiveNetworking.SteamTransport
         {
             if ( _parameters.UsingRelay.ToBoolean() )
             {
-                // TODO: Implement this
+                _socket.Value = IsSteamServer ? SteamNetworkingSockets.CreateRelaySocket_Server( _parameters.VirtualPort ) : SteamNetworkingSockets.CreateRelaySocket_Client( _parameters.VirtualPort );
             }
             else
             {
-                // var netAddress = NetAddress.AnyIp( endpoint.Port );
                 var netAddress = endpoint.ToNetAddress();
 
                 _socket.Value = IsSteamServer ? SteamNetworkingSockets.CreateNormalSocket_Server( netAddress ) : SteamNetworkingSockets.CreateNormalSocket_Client( netAddress );
@@ -451,11 +450,10 @@ namespace SqualiveNetworking.SteamTransport
         {
             if ( _parameters.UsingRelay.ToBoolean() )
             {
-                // TODO: Implement this
+                _connection.Value = SteamNetworkingSockets.ConnectRelay_Client( endpoint.ToSteamId(), _parameters.VirtualPort );
             }
             else
             {
-                // var netAddress = endpoint.IsLoopback ? NetAddress.LocalHost( 27015 ) : NetAddress.From( "127.0.0.1", 27015 );
                 var netAddress = endpoint.ToNetAddress();
                 
                 _connection.Value = SteamNetworkingSockets.ConnectNormal_Client( netAddress );
