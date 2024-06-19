@@ -12,6 +12,11 @@
   "_upm": {
     "changelog": ""
   },
+  "author": {
+    "name": "Squalive Studios",
+    "email": "squalivestudio@squalive.com",
+    "url": "https://github.com/Squalive"
+  },
   "repository": {
     "url": "https://github.com/Squalive/SqualiveNetworking.SteamTransport.git",
     "type": "git",
