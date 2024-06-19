@@ -36,13 +36,13 @@ namespace SqualiveNetworking.SteamTransport
 
         private NativeHashSet<ulong> _connecting;
 
-        private NativeParallelHashMap<ulong, Connection> _connected;
+        private NativeParallelHashMap<ulong, Steamworks.Data.Connection> _connected;
 
         #endregion
 
         #region Client
 
-        private NativeReference<Connection> _connection;
+        private NativeReference<Steamworks.Data.Connection> _connection;
 
         #endregion
 
@@ -72,13 +72,13 @@ namespace SqualiveNetworking.SteamTransport
                 _pollGroup = new NativeReference<HSteamNetPollGroup>( pollGroup, Allocator.Persistent );
 
                 _connecting = new NativeHashSet<ulong>( Constants.HashSetInitialCapacity, Allocator.Persistent );
-                _connected = new NativeParallelHashMap<ulong, Connection>( Constants.HashSetInitialCapacity, Allocator.Persistent );
+                _connected = new NativeParallelHashMap<ulong, Steamworks.Data.Connection>( Constants.HashSetInitialCapacity, Allocator.Persistent );
 
                 _socket = new NativeReference<Socket>( Allocator.Persistent );
             }
             else
             {
-                _connection = new NativeReference<Connection>( Allocator.Persistent );
+                _connection = new NativeReference<Steamworks.Data.Connection>( Allocator.Persistent );
             }
             
             SteamNetworkingSockets.OnConnectionStatusChanged += OnConnectionStatusChanged;
@@ -90,7 +90,7 @@ namespace SqualiveNetworking.SteamTransport
         {
             public PacketsQueue SendQueue;
 
-            public NativeParallelHashMap<ulong, Connection>.ReadOnly Connections;
+            public NativeParallelHashMap<ulong, Steamworks.Data.Connection>.ReadOnly Connections;
 
             public PortableFunctionPointer<NetMsgHelper.FreeDelegate> FreeFn;
 
@@ -222,8 +222,8 @@ namespace SqualiveNetworking.SteamTransport
         private unsafe struct ClientSendJob : IJob
         {
             public PacketsQueue SendQueue;
-
-            public NativeReference<Connection> Connection;
+            
+            public NativeReference<Steamworks.Data.Connection> Connection;
 
             public PortableFunctionPointer<NetMsgHelper.FreeDelegate> FreeFn;
             
@@ -305,7 +305,7 @@ namespace SqualiveNetworking.SteamTransport
 
             public OperationResult ReceiveResult;
 
-            public NativeReference<Connection> Connection;
+            public NativeReference<Steamworks.Data.Connection> Connection;
 
             public int MaxMessageCount;
             
@@ -505,7 +505,7 @@ namespace SqualiveNetworking.SteamTransport
             #endregion
         }
 
-        private void OnConnectionStatusChanged( Connection connection, ConnectionInfo connectionInfo )
+        private void OnConnectionStatusChanged( Steamworks.Data.Connection connection, ConnectionInfo connectionInfo )
         {
             var steamId = connectionInfo.Identity.SteamId;
             
